@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kolayca_teslimat/models/package_model.dart';
+import 'package:kolayca_teslimat/pages/home_page.dart';
+import 'package:kolayca_teslimat/pages/package_page.dart';
+import 'package:kolayca_teslimat/pages/splash_page.dart';
+import 'package:kolayca_teslimat/pages/waiting_packages.dart';
+// import 'package:kolaycateslimat/pages/home_page.dart';
+// import 'package:kolaycateslimat/pages/login_page.dart';
+// import 'package:kolaycateslimat/pages/waiting_packages_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,60 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.brown,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      home: SplashPage()
     );
   }
 }
