@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kolayca_teslimat/pages/home_page.dart';
 import 'package:kolayca_teslimat/pages/login_page.dart';
+import 'package:kolayca_teslimat/routes.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -16,8 +17,8 @@ class _SplashPageState extends State<SplashPage> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 3), (){
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+      Navigator.of(context).pushReplacementNamed(Routes.login);
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
     });
   }
 

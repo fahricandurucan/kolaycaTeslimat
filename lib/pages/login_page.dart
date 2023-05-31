@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kolayca_teslimat/pages/home_page.dart';
 
+import '../routes.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
@@ -34,7 +36,8 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       if (_phoneNumberController.text == '123456') {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -59,8 +62,11 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Hero(
+              tag: "Hero",
+              child: Icon(Icons.local_shipping,size:100,color: Colors.brown,),
+          ),
           buildPhoneNumber(),
-          //
           buildLoginButton()
         ],
       ),

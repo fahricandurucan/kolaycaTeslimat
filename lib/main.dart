@@ -4,6 +4,7 @@ import 'package:kolayca_teslimat/pages/home_page.dart';
 import 'package:kolayca_teslimat/pages/package_page.dart';
 import 'package:kolayca_teslimat/pages/splash_page.dart';
 import 'package:kolayca_teslimat/pages/waiting_packages.dart';
+import 'package:kolayca_teslimat/routes.dart';
 // import 'package:kolaycateslimat/pages/home_page.dart';
 // import 'package:kolaycateslimat/pages/login_page.dart';
 // import 'package:kolaycateslimat/pages/waiting_packages_page.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
-      home: SplashPage()
+      home: SplashPage(),
+      onGenerateRoute: Routes().onGenerateRoute,
     );
   }
 }

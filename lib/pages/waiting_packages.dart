@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kolayca_teslimat/pages/package_page.dart';
 import '../models/package_model.dart';
+import '../routes.dart';
 
 class WaitingPackagesPage extends StatefulWidget {
   @override
@@ -89,7 +90,8 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
   Widget buildPack(Package package){
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PackagePage(package: package)));
+        Navigator.of(context).pushNamed(Routes.package,arguments: package);
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => PackagePage(package: package)));
       },
       child: Container(
         decoration: BoxDecoration(

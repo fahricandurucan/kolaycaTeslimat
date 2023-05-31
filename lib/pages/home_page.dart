@@ -25,20 +25,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildBody() {
     return Container(
-      child: Column(
-        children: [
-          Text(
-            'My Counter: ' + myCounter.toString(),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                myCounter = myCounter + 1;
-              });
-            },
-            child: Text('Arttir'),
-          ),
-        ],
+      child: Center(
+        child: Column(
+          children: [
+            Hero(
+                tag: "Hero",
+                child: Icon(Icons.local_shipping,size: 150,color:Colors.brown)
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kolayca_teslimat/pages/login_page.dart';
 import 'package:kolayca_teslimat/pages/waiting_packages.dart';
 
+import '../routes.dart';
+
 class MyCustomDrawer extends StatefulWidget {
   const MyCustomDrawer({Key? key}) : super(key: key);
 
@@ -32,14 +34,16 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
             title: Text('Bekleyen Paketler'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>WaitingPackagesPage()));
+              Navigator.of(context).pushNamed(Routes.waitingPackages);
+              // Navigator.push(context, MaterialPageRoute(builder: (context)=>WaitingPackagesPage()));
             },
           ),
           ListTile(
             title: Text('Cikis Yap'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              Navigator.of(context).pushReplacementNamed(Routes.login);
+              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
             },
           ),
         ],
