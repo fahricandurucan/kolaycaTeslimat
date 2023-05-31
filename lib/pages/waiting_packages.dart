@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolayca_teslimat/pages/package_page.dart';
 import '../models/package_model.dart';
 
 class WaitingPackagesPage extends StatefulWidget {
@@ -69,41 +70,41 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
   // }
 
   Widget buildBody() {
-    return GestureDetector(
-      onTap: (){
-        print("lwşfkwlşef");
-      },
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: GridView.count(
-          crossAxisCount: crossaxisCount,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          padding: EdgeInsets.all(20),
-          childAspectRatio: crossaxisCount > 1 ? 1 : 16 / 9,
-          children: packages.map((package) {
-            return buildPack(package);
-          }).toList(),
-        ),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: GridView.count(
+        crossAxisCount: crossaxisCount,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        padding: EdgeInsets.all(20),
+        childAspectRatio: crossaxisCount > 1 ? 1 : 16 / 9,
+        children: packages.map((package) {
+          return buildPack(package);
+        }).toList(),
       ),
     );
   }
 
   Widget buildPack(Package package){
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("${package.id}"),
-          Text("${package.typeName}"),
-          Text("${package.price} TL"),
-        ],
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PackagePage(package: package)));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("${package.id}"),
+            Text("${package.typeName}"),
+            Text("${package.price} TL"),
+          ],
+        ),
       ),
     );
   }
