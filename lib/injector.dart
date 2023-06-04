@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
-import 'package:kolayca_teslimat/pages/auth_store.dart';
+import 'package:kolayca_teslimat/store/auth_store.dart';
 import 'package:kolayca_teslimat/pages/example_service.dart';
-import 'package:kolayca_teslimat/pages/package_store.dart';
-import 'package:kolayca_teslimat/pages/root_store.dart';
+import 'package:kolayca_teslimat/store/package_store.dart';
+import 'package:kolayca_teslimat/store/root_store.dart';
 import 'package:kolayca_teslimat/pages/theme_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

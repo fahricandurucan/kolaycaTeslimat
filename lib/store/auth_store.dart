@@ -1,7 +1,7 @@
 import 'package:kolayca_teslimat/models/user_model.dart';
 import 'package:mobx/mobx.dart';
 
-part "auth_store.g.dart";
+part 'auth_store.g.dart';
 
 class AuthStore = _AuthStore with _$AuthStore;
 

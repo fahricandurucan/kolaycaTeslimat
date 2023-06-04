@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:kolayca_teslimat/pages/auth_store.dart';
+import 'package:kolayca_teslimat/store/auth_store.dart';
 import 'package:kolayca_teslimat/pages/home_page.dart';
-import 'package:kolayca_teslimat/pages/root_store.dart';
+import 'package:kolayca_teslimat/store/root_store.dart';
 import 'package:kolayca_teslimat/pages/theme_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

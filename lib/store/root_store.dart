@@ -1,10 +1,10 @@
 
-import 'package:kolayca_teslimat/pages/auth_store.dart';
-import 'package:kolayca_teslimat/pages/package_store.dart';
+import 'package:kolayca_teslimat/store/auth_store.dart';
+import 'package:kolayca_teslimat/store/package_store.dart';
 import 'package:kolayca_teslimat/pages/theme_store.dart';
 import 'package:mobx/mobx.dart';
 
-part "root_store.g.dart";
+part 'root_store.g.dart';
 
 class RootStore = _RootStore with _$RootStore;
 
