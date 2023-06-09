@@ -10,7 +10,7 @@ part of 'theme_store.dart';
 
 mixin _$ThemeStore on _ThemeStore, Store {
   late final _$primaryColorAtom =
-      Atom(name: '_ThemeStore.primaryColor', context: context);
+  Atom(name: '_ThemeStore.primaryColor', context: context);
 
   @override
   Color get primaryColor {
@@ -26,7 +26,7 @@ mixin _$ThemeStore on _ThemeStore, Store {
   }
 
   late final _$_ThemeStoreActionController =
-      ActionController(name: '_ThemeStore', context: context);
+  ActionController(name: '_ThemeStore', context: context);
 
   @override
   void changePrimaryColor(Color _color) {

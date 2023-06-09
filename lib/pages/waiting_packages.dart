@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kolayca_teslimat/pages/package_page.dart';
+import 'package:kolayca_teslimat/store/package_store.dart';
+import 'package:kolayca_teslimat/store/root_store.dart';
+import 'package:provider/provider.dart';
 import '../models/package_model.dart';
 import '../routes.dart';
 
@@ -9,27 +13,30 @@ class WaitingPackagesPage extends StatefulWidget {
 }
 
 class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
-  // List<int> packages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-  List<Package> packages = [
-    Package(id:"23132",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"5132",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"453132",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"21702",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"23168",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"23682",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"23642",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-    Package(id:"23478",typeName: "Standart Gönderim", price: 15.50, description: "wefwf",
-      sender: 'Amazon', receiver: 'Fahrican Durucan +905364443232', status: 'Depoda', receiverAddress: '', senderAddress: '',),
-  ];
+  late RootStore rootStore;
+  late PackageStore packageStore;
 
   int crossaxisCount = 1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    () async {
+      await Future.delayed(Duration.zero);
+      await packageStore.fetchPackages();
+    }();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    rootStore = Provider.of<RootStore>(context);
+    packageStore = rootStore.packageStore;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,26 +78,29 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
   // }
 
   Widget buildBody() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: GridView.count(
-        crossAxisCount: crossaxisCount,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-        padding: EdgeInsets.all(20),
-        childAspectRatio: crossaxisCount > 1 ? 1 : 16 / 9,
-        children: packages.map((package) {
-          return buildPack(package);
-        }).toList(),
-      ),
-    );
+    return Observer(builder: (context) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: GridView.count(
+          crossAxisCount: crossaxisCount,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          padding: EdgeInsets.all(20),
+          childAspectRatio: crossaxisCount > 1 ? 1 : 16 / 9,
+          children: packageStore.packages.map((package) {
+            return buildPack(package);
+          }).toList(),
+        ),
+      );
+    });
   }
 
-  Widget buildPack(Package package){
+  Widget buildPack(PackageModel package){
     return GestureDetector(
       onTap: (){
-        Navigator.of(context).pushNamed(Routes.package,arguments: package);
+        packageStore.choosePackage(package);
+        Navigator.of(context).pushNamed(Routes.package);
         // Navigator.push(context, MaterialPageRoute(builder: (context) => PackagePage(package: package)));
       },
       child: Container(
@@ -102,9 +112,10 @@ class _WaitingPackagesPageState extends State<WaitingPackagesPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("${package.id}"),
-            Text("${package.typeName}"),
-            Text("${package.price} TL"),
+            Text("Paket ID: ${package.id}"),
+            Text("Tip: ${package.typeName}"),
+            Text("Fiyat: ${package.price} TL"),
+            Text("Durum: ${package.status}"),
           ],
         ),
       ),

@@ -38,12 +38,20 @@ class _MyCustomDrawerState extends State<MyCustomDrawer> {
       return Drawer(
         child: ListView(
           children: [
-            DrawerHeader(
-              child: Text('Hoşgeldin, ${_authStore.user?.firstName ?? ""}'),
-              decoration: BoxDecoration(
-                color: _themeStore.primaryColor,
-              ),
-            ),
+            Observer(builder: (context) {
+              return DrawerHeader(
+                child: Column(
+                  children: [
+                    Text("${_authStore.user?.firstName ?? ""} ${_authStore.user?.lastName ?? ""}",
+                    style: TextStyle(fontSize: 24),),
+                    Text("Kazancın: ₺ ${_authStore.user?.balanceAmount ?? ""}")
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  color: _themeStore.primaryColor,
+                ),
+              );
+            }),
             ListTile(
               title: Text('Rota Haritasi'),
               onTap: () {

@@ -1,15 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:kolayca_teslimat/store/auth_store.dart';
-import 'package:kolayca_teslimat/pages/home_page.dart';
-import 'package:kolayca_teslimat/store/root_store.dart';
+import 'package:kolayca_teslimat/injector.dart' as injector;
 import 'package:kolayca_teslimat/pages/theme_store.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kolayca_teslimat/injector.dart' as injector;
-
 
 import '../routes.dart';
+import '../store/auth_store.dart';
+import '../store/root_store.dart';
 import 'example_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,36 +19,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final ExampleService _exampleService = injector.serviceLocator.get<ExampleService>();
-
   late RootStore _rootStore;
   late AuthStore _authStore;
   late ThemeStore _themeStore;
 
-
+  final ExampleService _exampleService = injector.serviceLocator.get<ExampleService>();
   final TextEditingController _phoneNumberController = new TextEditingController();
 
   bool loginIsStarted = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
       _phoneNumberController.text = sharedPreferences.getString('phoneNumber') ?? '';
-    });  }
+    });
+  }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
     _rootStore = Provider.of<RootStore>(context);
     _authStore = _rootStore.authStore;
     _themeStore = _rootStore.themeStore;
-
   }
-
 
   void attemptLogin() {
     if (_phoneNumberController.text.isEmpty) {
@@ -61,13 +57,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void startLogin() {
-    _authStore.login(_phoneNumberController.text);
+  Future<void> startLogin() async {
+    await _authStore.login(_phoneNumberController.text);
+        SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
+          sharedPreferences.setString('phoneNumber', _phoneNumberController.text);
+        });
 
-    if(_authStore.isLoginIn == true){
+    if (_authStore.isLoggedIn == true) {
       Navigator.of(context).pushReplacementNamed(Routes.home);
-    }
-    else{
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Bilgileriniz Hatali.'),
@@ -76,25 +74,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // void startLoginRequestWithException() {
+  //   try {
+  //     _authStore.loginWithException(_phoneNumberController.text);
 
-  // void startFakeRequest() {
-  //   setState(() {
-  //     loginIsStarted = true;
-  //   });
-  //
-  //   Future.delayed(Duration(seconds: 2), () {
-  //     setState(() {
-  //       loginIsStarted = false;
-  //     });
-  //
-  //     SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
-  //       sharedPreferences.setString('phoneNumber', _phoneNumberController.text);
-  //     });
-  //
-  //
-  //     if (_phoneNumberController.text == '123456') {
+  //     if (_authStore.isLoggedIn == true) {
   //       Navigator.of(context).pushReplacementNamed(Routes.home);
-  //       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
   //     } else {
   //       ScaffoldMessenger.of(context).showSnackBar(
   //         SnackBar(
@@ -102,6 +87,58 @@ class _LoginPageState extends State<LoginPage> {
   //         ),
   //       );
   //     }
+  //   } catch (error) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(error.toString()),
+  //       ),
+  //     );
+  //   } finally {
+  //     print('Login Request Finished');
+  //   }
+  // }
+
+  // void startLoginRequest() {
+  //   _authStore.login(_phoneNumberController.text);
+
+  //   if (_authStore.isLoggedIn == true) {
+  //     print('Login Success');
+  //     Navigator.of(context).pushReplacementNamed(Routes.home);
+  //   } else {
+  //     print('Login Failed');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Bilgileriniz Hatali.'),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // void startFakeRequest() {
+  //   setState(() {
+  //     loginIsStarted = true;
+  //   });
+
+  //   Future.delayed(Duration(seconds: 1), () {
+  //     setState(() {
+  //       loginIsStarted = false;
+  //     });
+
+  //     SharedPreferences.getInstance().then((SharedPreferences sharedPreferences) {
+  //       sharedPreferences.setString('phoneNumber', _phoneNumberController.text);
+  //     });
+
+  //     if (_phoneNumberController.text == '123456') {
+  //       Navigator.of(context).pushReplacementNamed(Routes.home);
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Bilgileriniz Hatali.'),
+  //         ),
+  //       );
+  //     }
+  //   }).catchError((err) {
+  //     print(err);
   //   });
   // }
 
@@ -114,18 +151,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildBody() {
-    return Observer(builder:(context){
+    return Observer(builder: (context) {
       return Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Hero(
-              tag: "Hero",
-              child: Icon(Icons.local_shipping,size:100,color: Colors.brown,),
+              tag: 'logo',
+              child: Icon(
+                Icons.local_shipping,
+                size: 100,
+                color: _themeStore.primaryColor,
+              ),
             ),
+            //
             buildPhoneNumber(),
-            buildLoginButton()
+            //
+            buildLoginButton(),
+
+            //
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _themeStore.changePrimaryColor(Colors.yellow);
+            //   },
+            //   child: Text('Yellow'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _themeStore.changePrimaryColor(Colors.purple);
+            //   },
+            //   child: Text('Purple'),
+            // ),
           ],
         ),
       );
@@ -163,8 +220,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildPhoneNumber() {
-    return Observer(builder: (context){
-      return  Container(
+    return Observer(builder: (context) {
+      return Container(
         margin: EdgeInsets.only(left: 20, right: 20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -174,11 +231,10 @@ class _LoginPageState extends State<LoginPage> {
           controller: _phoneNumberController,
           decoration: new InputDecoration(
             hintText: 'Telefon Numaranız',
-            icon: new Icon(Icons.person),
+            icon: new Icon(Icons.person, color: _themeStore.primaryColor),
           ),
         ),
       );
     });
   }
-
 }

@@ -1,27 +1,36 @@
-import 'package:kolayca_teslimat/models/user_model.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:kolayca_teslimat/injector.dart' as injector;
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import '../models/user_model.dart';
+import '../network/auth_service.dart';
 
 part 'auth_store.g.dart';
 
 class AuthStore = _AuthStore with _$AuthStore;
 
-abstract class _AuthStore with Store{
+abstract class _AuthStore with Store {
+  final AuthService authService = injector.serviceLocator.get<AuthService>();
+
   @observable
   UserModel? user;
 
   @computed
-  bool get isLoginIn => user!=null;
+  bool get isLoggedIn => user != null;
 
   @action
-  void login(String _phoneNumber) {
-    if (_phoneNumber == '123456') {
-      user = UserModel(
-        firstName: 'John',
-        lastName: 'Doe',
-        phoneNumber: _phoneNumber,
-      );
-    } else {
-      user = null;
+  Future<void> login(String _phoneNumber) async {
+    try {
+      UserModel _userModel = await authService.login(_phoneNumber);
+
+      SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+      _sharedPreferences.setString('TOKEN', _userModel.token);
+
+      user = _userModel;
+    } catch (err) {
+      throw Exception('Login failed');
     }
   }
 
@@ -30,7 +39,7 @@ abstract class _AuthStore with Store{
     user = null;
   }
 
-
+//
 
 // @observable
 // bool isLoggedIn = false;
@@ -80,5 +89,4 @@ abstract class _AuthStore with Store{
 // void logout() {
 //   isLoggedIn = false;
 // }
-
 }
